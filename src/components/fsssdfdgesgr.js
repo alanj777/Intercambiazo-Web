@@ -18,7 +18,7 @@ const CreateClass = () => {
     setSuccess('');
 
     try {
-      // Buscar IDUsuarioEmisor basado en el usuario actual (ajusta esto según tu lógica de autenticación)
+      // Buscar IDUsuarioEmisor basado en el usuario actual
       const usernameEmisor = 'current_user'; // Cambia esto según la lógica de autenticación
       const { data: userEmisor, error: errorEmisor } = await supabase
         .from('Usuario')
@@ -49,7 +49,7 @@ const CreateClass = () => {
       if (errorMateria) throw errorMateria;
       const IDMateria = materiaData.IDMateria;
 
-      // Insertar en la tabla Clase
+      // Insertar en la tabla Clase y obtener el IDClase
       const { data: claseData, error: insertError } = await supabase
         .from('Clase')
         .insert([
@@ -60,15 +60,18 @@ const CreateClass = () => {
             IDMateria
           }
         ])
-        .select()
-        .single();
+        .select('IDClase') // Seleccionar el IDClase del registro insertado
+        .single(); // Asegúrate de que sea un solo registro
 
       if (insertError) throw insertError;
+
+      // Extraer IDClase del resultado
+      const IDClase = claseData.IDClase;
 
       setSuccess('Clase agregada exitosamente.');
 
       // Redireccionar a la página de PriceClass con el ID de la clase recién creada
-      navigate(`/price-class/${claseData.IDClase}`);
+      navigate(`/price-class/${IDClase}`);
     } catch (err) {
       setError(err.message);
     }

@@ -1,16 +1,14 @@
-// src/components/CreateClass.js
+// src/components/ClaseForm.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
-import { supabase } from '../utils/supabase';
+import {supabase} from '../utils/supabase';
 
-const CreateClass = () => {
+const ClaseForm = () => {
   const [usuarioReceptor, setUsuarioReceptor] = useState('');
   const [fecha, setFecha] = useState('');
   const [materia, setMateria] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const navigate = useNavigate(); // Hook para redireccionar
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,8 +16,8 @@ const CreateClass = () => {
     setSuccess('');
 
     try {
-      // Buscar IDUsuarioEmisor basado en el usuario actual (ajusta esto según tu lógica de autenticación)
-      const usernameEmisor = 'current_user'; // Cambia esto según la lógica de autenticación
+      // Obtener el ID del usuario emisor (simulamos el username del usuario actual)
+      const usernameEmisor = 'HungryDued'; // Cambia esto según la lógica de autenticación, Temp: Esta hardcodeado, cambialo cuando tengas un sistema de login :)
       const { data: userEmisor, error: errorEmisor } = await supabase
         .from('Usuario')
         .select('IDUsuario')
@@ -29,7 +27,7 @@ const CreateClass = () => {
       if (errorEmisor) throw errorEmisor;
       const IDUsuarioEmisor = userEmisor.IDUsuario;
 
-      // Buscar IDUsuarioReceptor basado en el nombre de usuario receptor
+      // Obtener el ID del usuario receptor
       const { data: userReceptor, error: errorReceptor } = await supabase
         .from('Usuario')
         .select('IDUsuario')
@@ -39,7 +37,7 @@ const CreateClass = () => {
       if (errorReceptor) throw errorReceptor;
       const IDUsuarioReceptor = userReceptor.IDUsuario;
 
-      // Buscar IDMateria basado en el nombre de materia
+      // Obtener el ID de la materia
       const { data: materiaData, error: errorMateria } = await supabase
         .from('Materia')
         .select('IDMateria')
@@ -50,7 +48,7 @@ const CreateClass = () => {
       const IDMateria = materiaData.IDMateria;
 
       // Insertar en la tabla Clase
-      const { data: claseData, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('Clase')
         .insert([
           {
@@ -59,16 +57,11 @@ const CreateClass = () => {
             Fecha: new Date(fecha).toISOString(),
             IDMateria
           }
-        ])
-        .select()
-        .single();
+        ]);
 
       if (insertError) throw insertError;
 
       setSuccess('Clase agregada exitosamente.');
-
-      // Redireccionar a la página de PriceClass con el ID de la clase recién creada
-      navigate(`/price-class/${claseData.IDClase}`);
     } catch (err) {
       setError(err.message);
     }
@@ -118,4 +111,4 @@ const CreateClass = () => {
   );
 };
 
-export default CreateClass;
+export default ClaseForm;

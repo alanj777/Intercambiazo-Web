@@ -35,6 +35,7 @@ const Header = () => {
             show={showMenu}
             onClick={toggleMenu}
           >
+            <Dropdown.Item href="/create-class">Crear Clase</Dropdown.Item>
             <Dropdown.Item href="#/modify-profile">Modificar Perfil</Dropdown.Item>
             <Dropdown.Item href="#/contact">Contacto</Dropdown.Item>
             <Dropdown.Item href="#/logout">Cerrar Sesión</Dropdown.Item>

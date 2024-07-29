@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { supabase } from './utils/supabase';
 import ContactCard from './components/ContactCard';
-import CreateClass from './components/CreateClass';
 import HomePage from './components/HomePage';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header';
+import CreateClass from './components/CreateClass';
+import PriceClass from './components/PriceClass';
+import CreateForm from './components/fsssdfdgesgr'
 
 const App = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -54,7 +56,8 @@ const App = () => {
             </div>
           }
         />
-        <Route path="/create-class" element={<CreateClass />} />
+        <Route path="/create-class" element={<CreateForm />} />
+        <Route path="/price-class/:idClase" element={<PriceClass />} />
       </Routes>
     </Router>
   );
