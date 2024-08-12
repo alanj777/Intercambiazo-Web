@@ -1,7 +1,7 @@
 // src/components/CreateClass.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Alert, ListGroup } from 'react-bootstrap';
 import { supabase } from '../utils/supabase';
 
 const CreateClass = () => {
@@ -10,7 +10,41 @@ const CreateClass = () => {
   const [materia, setMateria] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const navigate = useNavigate(); // Hook para redireccionar
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const navigate = useNavigate();
+
+  // Función para buscar usuarios en Supabase
+  const fetchSuggestions = async (query) => {
+    if (query.length > 2) { // Solo buscar si el texto tiene más de 2 caracteres
+      try {
+        const { data, error } = await supabase
+          .from('Usuario')
+          .select('IDUsuario, Username')
+          .ilike('Username', `%${query}%`) // Búsqueda insensible a mayúsculas/minúsculas
+          .limit(5); // Limitar la cantidad de sugerencias
+
+        if (error) throw error;
+        setSuggestions(data);
+      } catch (err) {
+        console.error(err);
+        setError('Error al buscar usuarios.');
+      }
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  // Efecto para actualizar sugerencias en función del texto ingresado
+  useEffect(() => {
+    fetchSuggestions(usuarioReceptor);
+  }, [usuarioReceptor]);
+
+  const handleSuggestionClick = (username, userId) => {
+    setUsuarioReceptor(username);
+    setSelectedUserId(userId);
+    setSuggestions([]);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,26 +52,22 @@ const CreateClass = () => {
     setSuccess('');
 
     try {
+      if (!selectedUserId) {
+        throw new Error('Debe seleccionar un usuario receptor.');
+      }
+
       // Buscar IDUsuarioEmisor basado en el usuario actual
-      const usernameEmisor = 'HungryDued'; // Cambia esto según la lógica de autenticación
+      const usernameEmisor = 'Casimiro Saavedra'; // Cambia esto según la lógica de autenticación
       const { data: userEmisor, error: errorEmisor } = await supabase
         .from('Usuario')
         .select('IDUsuario')
         .eq('Username', usernameEmisor)
         .single();
-        console.log("Fiumba");
+
       if (errorEmisor) throw errorEmisor;
       const IDUsuarioEmisor = userEmisor.IDUsuario;
 
-      // Buscar IDUsuarioReceptor basado en el nombre de usuario receptor
-      const { data: userReceptor, error: errorReceptor } = await supabase
-        .from('Usuario')
-        .select('IDUsuario')
-        .eq('Username', usuarioReceptor)
-        .single();
-        console.log("Fiumba2" );
-      if (errorReceptor) throw errorReceptor;
-      const IDUsuarioReceptor = userReceptor.IDUsuario;
+      // IDUsuarioReceptor ya se tiene como `selectedUserId`
 
       // Buscar IDMateria basado en el nombre de materia
       const { data: materiaData, error: errorMateria } = await supabase
@@ -45,7 +75,7 @@ const CreateClass = () => {
         .select('IDMateria')
         .eq('Nombre', materia)
         .single();
-        console.log("Fiumba 3");
+
       if (errorMateria) throw errorMateria;
       const IDMateria = materiaData.IDMateria;
 
@@ -55,14 +85,14 @@ const CreateClass = () => {
         .insert([
           {
             IDUsuarioEmisor,
-            IDUsuarioReceptor,
+            IDUsuarioReceptor: selectedUserId, // Usar selectedUserId
             Fecha: new Date(fecha).toISOString(),
             IDMateria
           }
         ])
-        .select('IDClase') // Seleccionar el IDClase del registro insertado
-        .single(); // Asegúrate de que sea un solo registro
-        console.log("Fiumba4");
+        .select('IDClase')
+        .single();
+
       if (insertError) throw insertError;
 
       // Extraer IDClase del resultado
@@ -89,6 +119,19 @@ const CreateClass = () => {
             value={usuarioReceptor}
             onChange={(e) => setUsuarioReceptor(e.target.value)}
           />
+          {suggestions.length > 0 && (
+            <ListGroup className="mt-2">
+              {suggestions.map(user => (
+                <ListGroup.Item
+                  key={user.IDUsuario}
+                  onClick={() => handleSuggestionClick(user.Username, user.IDUsuario)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {user.Username}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formFecha">
