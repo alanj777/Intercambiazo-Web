@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { Navbar, Nav, Dropdown, DropdownButton, Container } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
-import Logo from '../vendor/logo.svg'
+import Logo from '../vendor/logo.svg';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate(); // Inicializa useNavigate
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+  };
+
+  const handleGoBack = () => {
+    navigate('/index'); // Redirige a localhost:3000/index
   };
 
   return (
     <Navbar bg="light" expand="lg" className="justify-content-between">
       <Container>
         <Nav>
-          <Nav.Link href="#" className="d-flex align-items-center">
+          <Nav.Link onClick={handleGoBack} className="d-flex align-items-center" style={{ cursor: 'pointer' }}>
             <FaArrowLeft size={24} />
           </Nav.Link>
         </Nav>

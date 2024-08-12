@@ -9,6 +9,8 @@ import Header from './components/Header';
 import CreateClass from './components/CreateClass';
 import PriceClass from './components/PriceClass';
 import CreateForm from './components/fsssdfdgesgr'
+import WalletScreen from './components/Billetera';
+import MainPage from './components/MainPage';
 
 const App = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -56,8 +58,10 @@ const App = () => {
             </div>
           }
         />
+        <Route path="/Index" element={<MainPage />} />
         <Route path="/create-class" element={<CreateForm />} />
         <Route path="/price-class/:idClase" element={<PriceClass />} />
+        <Route path="/wallet" element={<WalletScreen />} />
       </Routes>
     </Router>
   );
