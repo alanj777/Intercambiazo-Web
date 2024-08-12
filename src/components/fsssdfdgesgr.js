@@ -19,13 +19,13 @@ const CreateClass = () => {
 
     try {
       // Buscar IDUsuarioEmisor basado en el usuario actual
-      const usernameEmisor = 'current_user'; // Cambia esto según la lógica de autenticación
+      const usernameEmisor = 'HungryDued'; // Cambia esto según la lógica de autenticación
       const { data: userEmisor, error: errorEmisor } = await supabase
         .from('Usuario')
         .select('IDUsuario')
         .eq('Username', usernameEmisor)
         .single();
-
+        console.log("Fiumba");
       if (errorEmisor) throw errorEmisor;
       const IDUsuarioEmisor = userEmisor.IDUsuario;
 
@@ -35,7 +35,7 @@ const CreateClass = () => {
         .select('IDUsuario')
         .eq('Username', usuarioReceptor)
         .single();
-
+        console.log("Fiumba2" );
       if (errorReceptor) throw errorReceptor;
       const IDUsuarioReceptor = userReceptor.IDUsuario;
 
@@ -45,7 +45,7 @@ const CreateClass = () => {
         .select('IDMateria')
         .eq('Nombre', materia)
         .single();
-
+        console.log("Fiumba 3");
       if (errorMateria) throw errorMateria;
       const IDMateria = materiaData.IDMateria;
 
@@ -62,7 +62,7 @@ const CreateClass = () => {
         ])
         .select('IDClase') // Seleccionar el IDClase del registro insertado
         .single(); // Asegúrate de que sea un solo registro
-
+        console.log("Fiumba4");
       if (insertError) throw insertError;
 
       // Extraer IDClase del resultado

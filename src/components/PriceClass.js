@@ -1,10 +1,11 @@
 // src/components/PriceClass.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams  } from 'react-router-dom';
 import { supabase } from '../utils/supabase';
 import { Alert, Button, Form, Container } from 'react-bootstrap';
 
-const PriceClass = ({ idClase }) => {
+const PriceClass = () => {
+  const { idClase } = useParams();
   const [total, setTotal] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -21,13 +22,10 @@ const PriceClass = ({ idClase }) => {
         .from('Billetera')
         .select('*')
         .single();
-
+        
+        console.log("si");
       if (billeteraError) throw billeteraError;
-      const { IDBilletera, Saldo } = billeteraData;
-
-      if (Saldo < total) {
-        throw new Error('Saldo insuficiente en la billetera.');
-      }
+      const { IDBilletera } = billeteraData;
 
       // Insertar en la tabla Compra
       const { error: insertError } = await supabase
@@ -43,15 +41,14 @@ const PriceClass = ({ idClase }) => {
       if (insertError) throw insertError;
 
       // Actualizar saldo de la billetera
-      const newSaldo = Saldo - total;
       const { error: updateError } = await supabase
-        .from('Billetera')
-        .update({ Saldo: newSaldo })
-        .eq('IDBilletera', IDBilletera);
+        .from('Compra')
+        .update({ Total: total })
+        .eq('IDClase', idClase);
 
       if (updateError) throw updateError;
 
-      setSuccess('Compra realizada exitosamente.');
+      setSuccess('Precio establecido.');
       setTimeout(() => {
         navigate('/');
       }, 2000);
