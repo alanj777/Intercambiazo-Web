@@ -25,7 +25,8 @@ const MainPage = () => {
         <Button
           variant="secondary"
           className="my-3 main-button"
-          onClick={() => navigate('/search-classes')}
+          onClick={handleTiendaPuntos}
+          
         >
           Buscar Clases
         </Button>
@@ -39,14 +40,14 @@ const MainPage = () => {
         <Button
           variant="success"
           className="my-3 main-button"
-          onClick={() => navigate('/manage-classes')}
+          onClick={handleTiendaPuntos}
         >
           Administrar Clases
         </Button>
         <Button
           variant="info"
           className="my-3 main-button"
-          onClick={() => navigate('/classes-taken')}
+          onClick={handleTiendaPuntos}
         >
           Clases Tomadas
         </Button>
