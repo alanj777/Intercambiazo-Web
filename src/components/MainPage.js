@@ -23,7 +23,7 @@ const MainPage = () => {
           Crear Clases
         </Button>
         <Button
-          variant="secondary"
+          variant="primary"
           className="my-3 main-button"
           onClick={handleTiendaPuntos}
           
@@ -31,35 +31,35 @@ const MainPage = () => {
           Buscar Clases
         </Button>
         <Button
-          variant="warning"
+          variant="primary"
           className="my-3 main-button"
           onClick={handleTiendaPuntos}
         >
           Tienda de Puntos
         </Button>
         <Button
-          variant="success"
+          variant="primary"
           className="my-3 main-button"
           onClick={handleTiendaPuntos}
         >
           Administrar Clases
         </Button>
         <Button
-          variant="info"
+          variant="primary"
           className="my-3 main-button"
           onClick={handleTiendaPuntos}
         >
           Clases Tomadas
         </Button>
         <Button
-          variant="danger"
+          variant="primary"
           className="my-3 main-button"
           onClick={() => window.location.href = 'http://localhost:3000/wallet'}
         >
           Billetera
         </Button>
         <Button
-          variant="dark"
+          variant="primary"
           className="my-3 main-button"
           onClick={() => navigate('/')}
         >
