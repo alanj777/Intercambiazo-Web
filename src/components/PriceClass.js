@@ -18,9 +18,11 @@ const PriceClass = () => {
 
     try {
       // Buscar la billetera
+      const today = new Date().toISOString();
       const { data: billeteraData, error: billeteraError } = await supabase
         .from('Billetera')
         .select('*')
+        .eq('IDBilletera', 1)
         .single();
         
         console.log("si");
@@ -34,7 +36,8 @@ const PriceClass = () => {
           {
             IDClase: idClase,
             IDBilletera,
-            Total: total
+            Total: total,
+            Fecha: today
           }
         ]);
 
