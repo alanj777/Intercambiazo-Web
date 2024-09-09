@@ -11,6 +11,7 @@ import PriceClass from './components/PriceClass';
 import CreateForm from './components/fsssdfdgesgr'
 import WalletScreen from './components/Billetera';
 import MainPage from './components/MainPage';
+import BuscarClase from './components/BuscarClase'
 
 const App = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -62,6 +63,7 @@ const App = () => {
         <Route path="/create-class" element={<CreateForm />} />
         <Route path="/price-class/:idClase" element={<PriceClass />} />
         <Route path="/wallet" element={<WalletScreen />} />
+        <Route path="/BuscarClase" element={<BuscarClase/>} />
       </Routes>
     </Router>
   );

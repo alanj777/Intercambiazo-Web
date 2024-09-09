@@ -1,6 +1,6 @@
 // src/components/MainPage.js
 import React from 'react';
-import { Container, Button, Alert } from 'react-bootstrap';
+import { Container, Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './MainPage.css'; // Asegúrate de crear y ajustar este archivo de CSS
 
@@ -25,17 +25,10 @@ const MainPage = () => {
         <Button
           variant="primary"
           className="my-3 main-button"
-          onClick={handleTiendaPuntos}
+          onClick={() => navigate('/BuscarClase')}
           
         >
           Buscar Clases
-        </Button>
-        <Button
-          variant="primary"
-          className="my-3 main-button"
-          onClick={handleTiendaPuntos}
-        >
-          Tienda de Puntos
         </Button>
         <Button
           variant="primary"
