@@ -1,0 +1,18 @@
+li {
+    font-size: 1.25rem; /* Tamaño de fuente mayor */
+    padding: 15px 30px; /* Mayor tamaño de botón */
+    border-radius: 12px; /* Bordes redondeados */
+    width: 350px; /* Ancho fijo */
+    text-align: center; /* Centrar texto */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del botón */
+    transition: background-color 0.3s, transform 0.2s; /* Transición suave */
+}
+.main-button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el ratón */
+    transform: scale(1.05); /* Efecto de escala al pasar el ratón */
+  }
+  
+  .main-button:active {
+    transform: scale(1.00); /* Restaurar escala al hacer clic */
+  }
+  

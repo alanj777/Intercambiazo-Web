@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
-
+import './CssBusqueda.css';
 function BuscarClase() {
     const [clases, setClases] = useState([]);
-    const [materias, setMaterias] = useState({});
+    const [materiasMap, setMateriasMap] = useState({});
     const UserLogged = 2; // Esto decide el ID de quién trae las clases
 
     useEffect(() => {
@@ -24,26 +24,26 @@ function BuscarClase() {
 
                 // Obtener los IDs de materias de las clases
                 const materiaIds = clasesData.map(clase => clase.IdMateria);
-                console.log('IDs de materias:', materiaIds); // Debugging
+                console.log('IDs de materias obtenidos:', materiaIds); // Depuración
 
                 // Obtener las materias correspondientes
                 let { data: materiasData, error: materiasError } = await supabase
-                    .from('Materia') // Nombre correcto de la tabla
-                    .select('*')
+                    .from('Materia')
+                    .select('*');
 
                 if (materiasError) {
                     console.error('Error al obtener materias:', materiasError);
                 } else {
-                    console.log('Datos de materias:', materiasData); // Debugging
-                    setMaterias(materiasData);
-
+                    console.log('Datos de materias obtenidos:', materiasData); // Depuración
+                    
                     // Crear un objeto para acceder a los nombres de las materias por ID
                     const materiasMap = materiasData.reduce((acc, materia) => {
-                        acc[materia.IdMateria] = materia.NombreMateria; // Ajustar nombre del campo si es necesario
+                        acc[materia.IDMateria] = materia.Nombre; // Ajustar nombre del campo si es necesario
                         return acc;
                     }, {});
-                    
-                    console.log('Mapa de materias:', materiasMap); // Debugging
+
+                    console.log('Mapa de materias:', materiasMap); // Depuración
+                    setMateriasMap(materiasMap);
                 }
             }
         };
@@ -58,16 +58,21 @@ function BuscarClase() {
                 <p>No hay clases disponibles.</p>
             ) : (
                 <ul>
-                    {clases.map((clase) => (
-                        <li key={clase.IdClase}>
-                            <h2>{clase.NombreClase}</h2>
-                            <p>{clase.Descripcion}</p>
-                            <p><strong>Fecha:</strong> {clase.Fecha}</p>
-                            {console.log("Materia: " + materias[0].Nombre + " Clase ID: " + clase.IDMateria)}
-                            <p><strong>Materia:</strong> {materias[clase.IdMateria] || 'Desconocida'}</p>
-                            
-                        </li>
-                    ))}
+                    {clases.map((clase) => {
+                        // Verificar los datos de cada clase
+                        console.log('Clase:', clase);
+                        console.log('Nombre de Materia:', materiasMap[clase.IDMateria]);
+
+                        return (
+                            <li key={clase.IdClase}>
+                                <h2>{clase.NombreClase}</h2>
+                                <p>{clase.Descripcion}</p>
+                                <p><strong>Fecha:</strong> {clase.Fecha}</p>
+                                <p><strong>Materia:</strong> {materiasMap[clase.IDMateria] || 'Desconocida'}</p>
+                                <button variant="primary" className="my-3 main-button"> Tomar Clase</button>
+                            </li>
+                        );
+                    })}
                 </ul>
             )}
         </div>
