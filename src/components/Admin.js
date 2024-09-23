@@ -45,18 +45,40 @@ function GestionarClases() {
     }, []);
 
     const handleDeleteClass = async (idClase) => {
-        const { error } = await supabase
+        const confirmation = window.confirm("¿Estás seguro de que deseas eliminar esta clase?");
+        if (!confirmation) return;
+    
+        console.log("Intentando eliminar clase con ID:", idClase); // Log para verificar ID
+    
+        // Primero eliminar las compras asociadas
+        const { error: deleteComprasError } = await supabase
+            .from('Compra')
+            .delete()
+            .eq('IDClase', idClase);
+    
+        if (deleteComprasError) {
+            console.error('Error al eliminar compras asociadas:', deleteComprasError);
+            alert('No se pudo eliminar las compras asociadas: ' + deleteComprasError.message);
+            return;
+        }
+    
+        // Ahora eliminar la clase
+        const { data, error } = await supabase
             .from('Clase')
             .delete()
             .eq('IDClase', idClase);
-
+    
         if (error) {
             console.error('Error al eliminar clase:', error);
+            alert('Error: ' + error.message); // Mensaje de error para el usuario
         } else {
-            // Actualizar el estado para eliminar la clase de la lista
+            console.log("Clase eliminada:", data); // Mostrar datos de la clase eliminada
             setClases(clases.filter(clase => clase.IDClase !== idClase));
         }
     };
+    
+    
+    
 
     return (
         <div>
