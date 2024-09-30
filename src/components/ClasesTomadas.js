@@ -46,7 +46,7 @@ function GestionarClases() {
 
     return (
         <div>
-            <h1>Gestionar Clases</h1>
+            <h1>Clases Tomadas</h1>
             {clases.length === 0 ? (
                 <p>No hay clases disponibles.</p>
             ) : (
