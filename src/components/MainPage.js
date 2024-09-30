@@ -40,7 +40,7 @@ const MainPage = () => {
         <Button
           variant="primary"
           className="my-3 main-button"
-          onClick={handleTiendaPuntos}
+          onClick={() => window.location.href = 'http://localhost:3000/ClasesTomadas'}
         >
           Clases Tomadas
         </Button>

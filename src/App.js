@@ -12,7 +12,8 @@ import CreateForm from './components/fsssdfdgesgr'
 import WalletScreen from './components/Billetera';
 import MainPage from './components/MainPage';
 import BuscarClase from './components/BuscarClase';
-import AdminClases from './components/Admin'
+import AdminClases from './components/Admin';
+import ClasesTomadas from './components/ClasesTomadas'
 
 const App = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -66,6 +67,7 @@ const App = () => {
         <Route path="/wallet" element={<WalletScreen />} />
         <Route path="/BuscarClase" element={<BuscarClase/>} />
         <Route path="/Admin" element={<AdminClases />} />
+        <Route path="/ClasesTomadas" element={<ClasesTomadas />}  />
       </Routes>
     </Router>
   );
