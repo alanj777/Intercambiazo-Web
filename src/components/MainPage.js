@@ -7,10 +7,6 @@ import './MainPage.css'; // Asegúrate de crear y ajustar este archivo de CSS
 const MainPage = () => {
   const navigate = useNavigate();
 
-  const handleTiendaPuntos = () => {
-    alert('Error, página en proceso de creación (laburantes sobreexplotados)');
-  };
-
   return (
     <Container className="text-center my-4">
       <h1 className="mb-4">Bienvenido a la Página Principal</h1>
