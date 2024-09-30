@@ -13,7 +13,24 @@ const CreateClass = () => {
   const [success, setSuccess] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [materiasList, setMateriasList] = useState([]); // Estado para las materias
   const navigate = useNavigate();
+
+  // Función para cargar las materias desde Supabase
+  const fetchMaterias = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('Materia')
+        .select('Nombre');
+
+      if (error) throw error;
+
+      setMateriasList(data);
+    } catch (err) {
+      console.error(err);
+      setError('Error al cargar las materias.');
+    }
+  };
 
   const fetchSuggestions = async (query) => {
     if (query.length > 2) {
@@ -36,6 +53,7 @@ const CreateClass = () => {
   };
 
   useEffect(() => {
+    fetchMaterias(); // Cargar las materias al montar el componente
     fetchSuggestions(usuarioReceptor);
   }, [usuarioReceptor]);
 
@@ -76,14 +94,12 @@ const CreateClass = () => {
 
       const { data: claseData, error: insertError } = await supabase
         .from('Clase')
-        .insert([
-          {
-            IDUsuarioEmisor,
-            IDUsuarioReceptor: selectedUserId,
-            Fecha: new Date(fecha).toISOString(),
-            IDMateria
-          }
-        ])
+        .insert([{
+          IDUsuarioEmisor,
+          IDUsuarioReceptor: selectedUserId,
+          Fecha: new Date(fecha).toISOString(),
+          IDMateria
+        }])
         .select('IDClase')
         .single();
 
@@ -106,7 +122,6 @@ const CreateClass = () => {
     setSuccess('');
 
     try {
-      // Buscar la billetera
       const today = new Date().toISOString();
       const { data: billeteraData, error: billeteraError } = await supabase
         .from('Billetera')
@@ -117,21 +132,17 @@ const CreateClass = () => {
       if (billeteraError) throw billeteraError;
       const { IDBilletera } = billeteraData;
 
-      // Insertar en la tabla Compra
       const { error: insertError } = await supabase
         .from('Compra')
-        .insert([
-          {
-            IDClase: idClase,
-            IDBilletera,
-            Total: total,
-            Fecha: today
-          }
-        ]);
+        .insert([{
+          IDClase: idClase,
+          IDBilletera,
+          Total: total,
+          Fecha: today
+        }]);
 
       if (insertError) throw insertError;
 
-      // Actualizar saldo de la billetera (si es necesario)
       const { error: updateError } = await supabase
         .from('Compra')
         .update({ Total: total })
@@ -187,14 +198,19 @@ const CreateClass = () => {
         <Form.Group controlId="formMateria">
           <Form.Label>Materia</Form.Label>
           <Form.Control
-            type="text"
-            placeholder="Nombre de la materia"
+            as="select"
             value={materia}
             onChange={(e) => setMateria(e.target.value)}
-          />
+          >
+            <option value="">Selecciona una materia</option>
+            {materiasList.map((materiaItem) => (
+              <option key={materiaItem.Nombre} value={materiaItem.Nombre}>
+                {materiaItem.Nombre}
+              </option>
+            ))}
+          </Form.Control>
         </Form.Group>
 
-        {/* Integrando el formulario de PriceClass */}
         <Form.Group controlId="formTotal">
           <Form.Label>Precio</Form.Label>
           <Form.Control
