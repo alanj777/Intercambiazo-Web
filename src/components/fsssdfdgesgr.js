@@ -22,15 +22,18 @@ const CreateClass = () => {
       const { data, error } = await supabase
         .from('Materia')
         .select('Nombre');
-
+  
       if (error) throw error;
-
-      setMateriasList(data);
+  
+      // Ordenar las materias alfabéticamente
+      const sortedMaterias = data.sort((a, b) => a.Nombre.localeCompare(b.Nombre));
+      setMateriasList(sortedMaterias);
     } catch (err) {
       console.error(err);
       setError('Error al cargar las materias.');
     }
   };
+  
 
   const fetchSuggestions = async (query) => {
     if (query.length > 2) {

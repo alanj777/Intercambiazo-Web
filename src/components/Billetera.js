@@ -126,7 +126,7 @@ const WalletScreen = () => {
                 {transactions.length > 0 ? (
                   transactions.map((transaction) => (
                     <li key={transaction.IDCompra}>
-                      Clase ID: {transaction.IDClase}, Precio: ${transaction.Total.toFixed(2)}, Fecha: {new Date(transaction.Fecha).toLocaleDateString()}
+                      Número De Órden: {transaction.IDClase}, Precio: ${transaction.Total.toFixed(2)}, Fecha: {new Date(transaction.Fecha).toLocaleDateString()}
                     </li>
                   ))
                 ) : (

@@ -47,6 +47,7 @@ const App = () => {
             <div>
               <h1>Intercambiazo</h1>
               <h2>Alumnos Recomendados</h2>
+              {/* MateriaQueDa */}
               <div className="container">
                 {usuarios.map((usuario) => (
                   <ContactCard 
