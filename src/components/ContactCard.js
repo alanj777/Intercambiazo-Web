@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase'; // Asegúrate de que la ruta sea correcta
+import { supabase } from '../utils/supabase';
 
-const ContactCard = ({ usuario }) => {
+const ContactCard = ({ usuario, usuarioAutenticado }) => {
   const [materias, setMaterias] = useState([]);
   const [isChatVisible, setIsChatVisible] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isMinimized, setIsMinimized] = useState(false);
 
   useEffect(() => {
     const fetchMaterias = async () => {
@@ -50,30 +49,51 @@ const ContactCard = ({ usuario }) => {
   const toggleChat = () => {
     setIsChatVisible(!isChatVisible);
     if (!isChatVisible) {
-      setMessages([{ sender: 'usuario', text: 'Hola, ¿En qué te puedo ayudar?' }]);
+      // Mensaje predeterminado del usuario receptor
+      setMessages([{ sender: 'receptor', text: 'Hola, ¿En qué te puedo ayudar?' }]);
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
+    if (!usuarioAutenticado) {
+      console.error("usuarioAutenticado no está definido");
+      return;
+    }
+
     if (inputMessage.trim()) {
+      // Mostrar el mensaje en el chat
       setMessages(prevMessages => [
         ...prevMessages,
-        { sender: 'me', text: inputMessage }
+        { sender: 'emisor', text: inputMessage } // Registro visual
       ]);
-      setInputMessage('');
+
+      // Insertar el mensaje en la base de datos
+      const { error } = await supabase
+        .from('mensaje')
+        .insert({
+          IDUsuarioEmisor: usuarioAutenticado.IDUsuario, // ID del usuario común
+          IDUsuarioReceptor: usuario.IDUsuario, // ID del usuario en la contact card
+          Mensaje: inputMessage,
+        });
+
+      if (error) {
+        console.error('Error inserting message:', error);
+      }
+
+      setInputMessage(''); // Limpiar el input
     }
   };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSendMessage();
-      e.preventDefault();
+      e.preventDefault(); // Prevenir el comportamiento por defecto
     }
   };
 
   const closeChat = () => {
     setIsChatVisible(false);
-    setMessages([]);
+    setMessages([]); // Limpiar los mensajes al cerrar
   };
 
   const minimizeChat = () => {
@@ -114,7 +134,7 @@ const ContactCard = ({ usuario }) => {
             padding: '10px',
             backgroundColor: 'white',
             zIndex: 1000,
-            width: isMinimized ? '200px' : '400px', // Aumentar el ancho
+            width: isMinimized ? '200px' : '400px',
             height: isMinimized ? '50px' : 'auto',
             overflow: 'hidden',
           }}
@@ -133,17 +153,17 @@ const ContactCard = ({ usuario }) => {
                   <div 
                     key={index} 
                     style={{
-                      backgroundColor: msg.sender === 'me' ? '#007BFF' : '#00aae4', // Celeste para el usuario y azul para 'me'
+                      backgroundColor: msg.sender === 'emisor' ? '#007BFF' : '#00aae4',
                       color: 'white',
                       borderRadius: '5px',
                       padding: '10px',
                       margin: '5px',
-                      textAlign: msg.sender === 'me' ? 'right' : 'left',
-                      maxWidth: '80%', // Para que los mensajes no sean demasiado anchos
-                      alignSelf: msg.sender === 'me' ? 'flex-end' : 'flex-start', // Alinear según el remitente
+                      textAlign: msg.sender === 'emisor' ? 'right' : 'left',
+                      maxWidth: '80%',
+                      alignSelf: msg.sender === 'emisor' ? 'flex-end' : 'flex-start',
                     }}
                   >
-                    <strong>{msg.sender === 'me' ? 'Tú' : usuario.Nombre}:</strong> {msg.text}
+                    <strong>{msg.sender === 'emisor' ? 'Tú' : usuario.Nombre}:</strong> {msg.text}
                   </div>
                 ))}
               </div>
@@ -153,7 +173,7 @@ const ContactCard = ({ usuario }) => {
                 onChange={(e) => setInputMessage(e.target.value)} 
                 onKeyPress={handleKeyPress}
                 placeholder="Escribe un mensaje..." 
-                style={{ width: '100%', marginTop: '10px' }} // Hacer el input más ancho
+                style={{ width: '100%', marginTop: '10px' }}
               />
               <button onClick={handleSendMessage}>Enviar</button>
             </>
