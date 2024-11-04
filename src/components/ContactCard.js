@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase';
 
-const ContactCard = ({ usuario, usuarioAutenticado }) => {
+const ContactCard = ({ usuario }) => {
   const [materias, setMaterias] = useState([]);
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -55,10 +55,10 @@ const ContactCard = ({ usuario, usuarioAutenticado }) => {
   };
 
   const handleSendMessage = async () => {
-    if (!usuarioAutenticado) {
+    /*if (!usuarioAutenticado) {
       console.error("usuarioAutenticado no está definido");
       return;
-    }
+    }*/
 
     if (inputMessage.trim()) {
       // Mostrar el mensaje en el chat
@@ -66,12 +66,12 @@ const ContactCard = ({ usuario, usuarioAutenticado }) => {
         ...prevMessages,
         { sender: 'emisor', text: inputMessage } // Registro visual
       ]);
-
+      //console.log(IDUsuarioBurger + " " + usuario.IDUsuario + " " + inputMessage)
       // Insertar el mensaje en la base de datos
       const { error } = await supabase
-        .from('mensaje')
+        .from('Mensaje')
         .insert({
-          IDUsuarioEmisor: usuarioAutenticado.IDUsuario, // ID del usuario común
+          IDUsuarioEmisor: 2, // ID del usuario común
           IDUsuarioReceptor: usuario.IDUsuario, // ID del usuario en la contact card
           Mensaje: inputMessage,
         });
