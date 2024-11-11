@@ -19,6 +19,11 @@ Paso 0: Descargar este proyecto desde github
 4. Ir a pestaña "Terminal"
 5. Seleccionar la opción "New Terminal"
 6. Escribir "npm i" y enviar (en la consola que aparece abajo)
-7. Utilizar "npm start" en la consola
-8. Abrir tu navegador de preferencia
-9. Buscar "localhost:3000"
+7. Escribir "npm install @supabase/supabase-js"
+8. Escribir "npm install react-bootstrap bootstrap"
+9. Utilizar "npm start" en la consola
+10. Abrir tu navegador de preferencia
+11. Entrar a Supabase
+12. Iniciar sesión
+13. 
+15. Buscar "localhost:3000"
