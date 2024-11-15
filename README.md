@@ -2,7 +2,7 @@
 Nadie nunca logró hacer un proyecto tan grande... Nadie nos incluye y nunca incluye ahora
 Versión: Oficial 1.0
 
-#**Features:**
+# **Features:**
 -Creación de clases con asignación de precio de las mismas
 -Contacto con otros alumnos
 -Búsqueda de clases
@@ -10,7 +10,7 @@ Versión: Oficial 1.0
 -Registro de clases ya tomadas
 -Billetera (Intercoins a cotización de mercado y registro de transacciones)
 
-#**Intstallation:**
+# **Intstallation:**
 
 Paso 0: Descargar este proyecto desde github
 1. Ir a pestaña "View" en Visual Studio Code
